@@ -10,8 +10,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _jumpForce;
     [SerializeField] Transform _rayPosition;
 
-    public UnityAction CoinRaised;
-
     private Animator _animator;
     private Rigidbody2D _rigidbody;
     
@@ -20,10 +18,8 @@ public class PlayerMovement : MonoBehaviour
     private bool _isGrounded;
     private float _rayDistance;
 
-    public int CoinCount { get; private set; }
-
-    
-    void Start()
+    private const string Speed = "Speed";
+    private void Start()
     {
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -31,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
         _rayDistance = 0.1f;
     }
 
-    void Update()
+    private void Update()
     {
         Move();
         Jump();
@@ -44,9 +40,9 @@ public class PlayerMovement : MonoBehaviour
         transform.Translate(direction * _speed * Time.deltaTime);
         Flip();
         if (_moveHorizontal != 0)
-            _animator.SetFloat("Speed", _speed);
+            _animator.SetFloat(Speed, _speed);
         else
-            _animator.SetFloat("Speed", 0);
+            _animator.SetFloat(Speed, 0);
     }
 
     private void Flip()
@@ -83,8 +79,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if(collision.TryGetComponent<Coin>(out Coin coin))
         {           
-            CoinRaised?.Invoke();
-            CoinCount++;
             Destroy(collision.gameObject);
         }
     }
